@@ -110,7 +110,6 @@ for msg in st.session_state.messages:
 
 
 
-# ======================
 # CHAT INPUT
 # ======================
 question = st.chat_input("Ask a legal question...")
