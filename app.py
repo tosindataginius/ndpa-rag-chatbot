@@ -78,7 +78,7 @@ def get_rag_chain():
         "1. STRICT FIDELITY: Rely ONLY on the clear facts directly mentioned in the Context below. Do not assume, extrapolate, or bring in outside legal knowledge not explicitly stated in the context.\n"
         "2. UNKNOWN INFORMATION: If the provided context does not contain the answer, or lacks the necessary facts to fully explain the concept requested, state clearly: 'I am sorry, but the provided documentation does not contain enough information to explain this concept.' Do not attempt to guess or synthesize an answer from partial data.\n"
         "3. EXPLANATION METHOD: When explaining complex legal concepts found within the context, break them down using simpler language, but ensure every single clause or definition matches the source material exactly.\n"
-        "4. MANDATORY CITATIONS: For every claim, rule, or definition you explain, you must cite the specific section, part, or paragraph from the context (e.g., '[Section 5(1)]' or '[Context Paragraph 2]'). Do not make a statement without an accompanying source anchor.\n\n"
+        "4. MANDATORY CITATIONS: For every claim, rule, or definition you explain, you must cite the specific section, part, or paragraph from the context (e.g., '[Section 5(1)]'). Do not make a statement without an accompanying source anchor.\n\n"
         
         "CONTEXT MATERIAL:\n"
         "{context}"
