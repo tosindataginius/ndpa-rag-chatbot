@@ -100,9 +100,13 @@ st.sidebar.title("⚙️ Controls")
 if st.sidebar.button("Clear Conversation History"):
     st.session_state.messages = []
 
+
+
 # ======================
 # CHAT MEMORY
 # ======================
+
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -144,3 +148,7 @@ if question:
 
 
 
+with st.sidebar:
+    st.markdown("Developed by Oluwasegun Oluwatosin (tosindataginius)")
+    st.link_button("Visit my LinkedIn Profile", "https://www.linkedin.com/in/oluwatosin-oluwasegun-1a9266288/")
+    st.link_button("Visit my GitHub Profile", "https://github.com/tosindataginius")
