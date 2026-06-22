@@ -14,10 +14,10 @@ from langchain_classic.chains.combine_documents import create_stuff_documents_ch
 
 load_dotenv()
 
-# 1. Initialize the exact same local embedding model used for indexing
+# Initialize the exact same local embedding model used for indexing
 embeddings = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
 
-# 2. Load the existing local database
+# Load the existing local database
 print("Loading vector database...")
 vectordb = Chroma(
     persist_directory= os.path.join(os.getcwd(), "chroma_db"),
@@ -34,14 +34,14 @@ retriever = vectordb.as_retriever(search_kwargs={"k": 5}) # Retrieves top 5 matc
 #     }
 # )
 
-# 3. Initialize Google Gemini (using the free tier)
+# Initialize Google Gemini (using the free tier)
 llm = ChatGoogleGenerativeAI(
     model="gemini-2.5-flash",
     google_api_key=os.getenv("GOOGLE_API_KEY"),
     temperature=0.2
 )
 
-# 4. Create the System Prompt Architecture
+# Create the System Prompt Architecture
 prompt = ChatPromptTemplate.from_messages([
     ("system", (
         "You are an expert Nigerian legal assistant specializing in the Nigeria Data Protection Act (NDPA). "
@@ -59,7 +59,7 @@ prompt = ChatPromptTemplate.from_messages([
 ])
 
 
-# 5. Build and run the RAG Pipeline
+# Build and run the RAG Pipeline
 question_chain = create_stuff_documents_chain(llm, prompt)
 rag_chain = create_retrieval_chain(retriever, question_chain)
 

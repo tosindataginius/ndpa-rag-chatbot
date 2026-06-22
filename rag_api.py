@@ -54,16 +54,23 @@ llm = ChatGoogleGenerativeAI(
 )
 
 # 2. Build Prompt & Chains
-system_prompt = (
-    "You are an expert assistant specialized in Nigerian legal documents.\n"
-    "Answer the user's question using strictly the retrieved context below. "
-    "If you do not know the answer based on the context, say that you do not know.\n\n"
-    "Context:\n{context}"
-)
 prompt = ChatPromptTemplate.from_messages([
-    ("system", system_prompt),
-    ("human", "{input}"),
+    ("system", (
+        "You are an expert Nigerian legal assistant specializing in the Nigeria Data Protection Act (NDPA). "
+        "Your task is to analyze the user's inquiry and provide professional, legally grounded explanations based strictly on the provided context.\n\n"
+        
+        "CRITICAL ANTI-HALLUCINATION RULES:\n"
+        "1. STRICT FIDELITY: Rely ONLY on the clear facts directly mentioned in the Context below. Do not assume, extrapolate, or bring in outside legal knowledge not explicitly stated in the context.\n"
+        "2. UNKNOWN INFORMATION: If the provided context does not contain the answer, or lacks the necessary facts to fully explain the concept requested, state clearly: 'I am sorry, but the provided documentation does not contain enough information to explain this concept.' Do not attempt to guess or synthesize an answer from partial data.\n"
+        "3. EXPLANATION METHOD: When explaining complex legal concepts found within the context, break them down using simpler language, but ensure every single clause or definition matches the source material exactly.\n"
+        "4. MANDATORY CITATIONS: For every claim, rule, or definition you explain, you must cite the specific section, part, or paragraph from the context (e.g., '[Section 5(1)]' or '[Context Paragraph 2]'). Do not make a statement without an accompanying source anchor.\n\n"
+        
+        "CONTEXT MATERIAL:\n"
+        "{context}"
+    )),
+    ("human", "{input}")
 ])
+
 
 question_chain = create_stuff_documents_chain(llm, prompt)
 rag_chain = create_retrieval_chain(retriever, question_chain)
@@ -96,8 +103,3 @@ async def ask_legal_agent(request: QueryRequest):
         
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Internal Server Error: {str(e)}")
-
-# Health check route
-@app.get("/")
-async def root():
-    return {"status": "online", "message": "Legal RAG Server is running."}

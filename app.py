@@ -72,20 +72,21 @@ def get_rag_chain():
     prompt = ChatPromptTemplate.from_messages([
     ("system", (
         "You are an expert Nigerian legal assistant specializing in the Nigeria Data Protection Act (NDPA). "
-        "Your task is to analyze the user's inquiry and provide professional, legally grounded insights based on the provided context.\n\n"
+        "Your task is to analyze the user's inquiry and provide professional, legally grounded explanations based strictly on the provided context.\n\n"
         
-        "CRITICAL RULES:\n"
-        "1. Maintain your persona as a helpful Nigerian legal expert at all times.\n"
-        "2. Base your guidance strictly on the provided Context. Do not invent facts.\n"
-        "3. If the provided context does not contain the exact answer but is related, summarize what the context *does* say about the topic to help the user.\n"
-        "4. Answer only using the supplied context. If the answer is not contained in the context, say you do not know.'\n\n"
+        "CRITICAL ANTI-HALLUCINATION RULES:\n"
+        "1. STRICT FIDELITY: Rely ONLY on the clear facts directly mentioned in the Context below. Do not assume, extrapolate, or bring in outside legal knowledge not explicitly stated in the context.\n"
+        "2. UNKNOWN INFORMATION: If the provided context does not contain the answer, or lacks the necessary facts to fully explain the concept requested, state clearly: 'I am sorry, but the provided documentation does not contain enough information to explain this concept.' Do not attempt to guess or synthesize an answer from partial data.\n"
+        "3. EXPLANATION METHOD: When explaining complex legal concepts found within the context, break them down using simpler language, but ensure every single clause or definition matches the source material exactly.\n"
+        "4. MANDATORY CITATIONS: For every claim, rule, or definition you explain, you must cite the specific section, part, or paragraph from the context (e.g., '[Section 5(1)]' or '[Context Paragraph 2]'). Do not make a statement without an accompanying source anchor.\n\n"
         
-        "Context:\n{context}"
+        "CONTEXT MATERIAL:\n"
+        "{context}"
     )),
     ("human", "{input}")
 ])
 
-    
+
     retriever = vectordb.as_retriever(search_kwargs={"k": 5})
     question_chain = create_stuff_documents_chain(llm, prompt)
     return create_retrieval_chain(retriever, question_chain)
@@ -138,3 +139,10 @@ if question:
                         """, unsafe_allow_html=True)
                         
             st.session_state.messages.append({"role": "assistant", "content": answer})
+
+
+
+with st.sidebar:
+    st.markdown("Developed by Oluwasegun Oluwatosin (tosindataginius)")
+    st.link_button("Visit my LinkedIn Profile", "https://www.linkedin.com/in/oluwatosin-oluwasegun-1a9266288/")
+    st.link_button("Visit my GitHub Profile", "https://github.com/tosindataginius")
